@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOMO Lottery - 1000x Better Odds</title>
+    <style>
+        /* CSS (unchanged from previous version) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        :root { --primary-blue: #0a043c; --secondary-purple: #775ada; --accent-gold: #ffd700; --text-light: #f4f4f4; --background-dark: #03001C; --card-background: rgba(13, 7, 66, 0.75); --success-green: #2ecc71; --fail-red: #e74c3c; }
+        @keyframes pulse-gold { 0% { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); } 50% { border-color: #fff; box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); } 100% { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); } }
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background-color: var(--background-dark); color: var(--text-light); overflow-x: hidden; }
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .container { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 2rem 1rem; box-sizing: border-box; }
+        .content-section { width: 100%; max-width: 800px; margin-bottom: 2rem; }
+        .page-header { text-align: center; }
+        .page-header h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin: 0 0 0.5rem 0; }
+        .page-header p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.9; }
+        .card { background-color: var(--card-background); border: 1px solid var(--secondary-purple); border-radius: 20px; padding: 1.5rem; backdrop-filter: blur(10px); }
+        .ignition-tracker h2 { margin: 0 0 1rem 0; font-weight: 600; text-align: center;}
+        .jackpot-value { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 700; color: var(--accent-gold); margin-bottom: 1rem; text-align: center;}
+        .progress-bar-container { background-color: rgba(0,0,0,0.3); border-radius: 50px; height: 25px; width: 100%; overflow: hidden; border: 1px solid var(--primary-blue);}
+        .progress-bar-inner { background: linear-gradient(90deg, #a88d00, var(--accent-gold)); height: 100%; width: 0%; border-radius: 50px; transition: width 0.5s ease-out; text-align: right; color: var(--primary-blue); font-weight: 700; font-size: 0.8rem; line-height: 25px; padding-right: 10px; box-sizing: border-box;}
+        .goal-text { margin-top: 0.5rem; font-weight: 300; opacity: 0.8; text-align: center;}
+        .goal-text a { color: inherit; text-decoration: underline; text-decoration-color: var(--accent-gold); transition: color 0.3s; }
+        .goal-text a:hover { color: var(--accent-gold); }
+        .bonus-ladder h3 { text-align: center; margin-bottom: 1rem; font-weight: 600;}
+        .ladder-tiers { display: flex; gap: 0.5rem; width: 100%;}
+        .tier { flex-grow: 1; padding: 0.75rem; text-align: center; border-radius: 8px; border: 2px solid transparent; background-color: rgba(0,0,0,0.2); transition: all 0.3s ease;}
+        .tier .label { font-size: 0.8rem; font-weight: 300; opacity: 0.7;}
+        .tier .bonus { font-size: 1.2rem; font-weight: 700;}
+        .tier.completed { opacity: 0.4; background-color: transparent; border: 2px dashed var(--secondary-purple);}
+        .tier.active { animation: pulse-gold 2s infinite; transform: scale(1.05); }
+        .tier.active .bonus { color: var(--accent-gold);}
+        .number-picker h3 { font-weight: 600; }
+        .number-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 0.5rem; }
+        .number-btn { aspect-ratio: 1/1; background-color: rgba(0, 0, 0, 0.2); border: 1px solid var(--secondary-purple); color: var(--text-light); border-radius: 50%; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .number-btn:hover:not(:disabled) { background-color: var(--secondary-purple); transform: scale(1.1); }
+        .number-btn.selected { background-color: var(--accent-gold); color: var(--primary-blue); border-color: var(--accent-gold); transform: scale(1.1); }
+        .number-btn:disabled:not(.selected) { opacity: 0.4; cursor: not-allowed; }
+        .quick-pick-btn { background: none; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; display: block; margin: 1.5rem auto 0 auto; }
+        .quick-pick-btn:hover { background-color: var(--accent-gold); color: var(--primary-blue); }
+        .purchase-footer { border-top: 1px solid var(--secondary-purple); margin-top: 2rem; padding-top: 1.5rem; }
+        .ticket-summary { background-color: rgba(0,0,0,0.2); border-radius: 10px; padding: 1.5rem; text-align: left; }
+        .ticket-summary h4 { margin: 0 0 1rem 0; font-weight: 600; text-align: center; }
+        .you-receive ul { list-style: none; padding: 0; margin: 0; }
+        .you-receive li { margin-bottom: 0.5rem; display: flex; align-items: center; }
+        .you-receive li .icon { margin-right: 0.75rem; color: var(--accent-gold); font-size: 1.2rem;}
+        #bonus-line { color: var(--success-green); font-weight: 600; }
+        #bonus-line .icon { color: var(--success-green); }
+        .cta-buy-ticket { background-color: var(--accent-gold); color: var(--primary-blue); padding: 18px 40px; border: none; border-radius: 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; width: 100%; margin-top: 1.5rem; }
+        .cta-buy-ticket:disabled { background-color: #555; color: #999; cursor: not-allowed; }
+        .cta-buy-ticket:not(:disabled):hover { transform: scale(1.03); box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
+        .token-info-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;}
+        .token-info-header h3 { margin: 0; font-size: 1.5rem; }
+        .token-info-section .card-content { display: flex; flex-direction: column; gap: 1.5rem; }
+        .chart-container { flex-basis: 60%; }
+        .token-details-list { list-style: none; padding: 0; margin: 0; }
+        .token-details-list li { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(119, 90, 218, 0.2); font-size: 0.9rem; }
+        .token-details-list li:last-child { border-bottom: none; }
+        .token-details-list span:first-child { opacity: 0.8; }
+        .token-details-list span:last-child { font-weight: 600; }
+        .token-price-change.positive { color: var(--success-green); }
+        .token-price-change.negative { color: var(--fail-red); }
+        @media (min-width: 768px) { .token-info-section .card-content { flex-direction: row; } }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="container">
+        <header class="page-header content-section">
+            <h1>1000x Better Odds Than The Powerball.</h1>
+            <p>Every Ticket Earns You Tokens in Our Jackpot Ecosystem</p>
+        </header>
+        <section class="ignition-tracker content-section card">
+            <h2>Current Jackpot Pool</h2><div class="jackpot-value" id="jackpot-value">0.0000 BTC</div>
+            <div class="progress-bar-container"><div class="progress-bar-inner" id="progress-bar">0.0%</div></div>
+            <p class="goal-text"><a href="how.html">First draw starts when the pool hits the <strong>1 BTC Ignition Goal!</strong></a></p>
+        </section>
+        <section class="bonus-ladder content-section">
+             <h3>Early Adopter Bonus Ladder</h3>
+             <div class="ladder-tiers">
+                <div class="tier active" id="tier-1" data-threshold="0.1"><span class="label">0-0.1 BTC</span><div class="bonus">+100% Tokens</div></div>
+                <div class="tier" id="tier-2" data-threshold="0.5"><span class="label">0.1-0.5 BTC</span><div class="bonus">+50% Tokens</div></div>
+                <div class="tier" id="tier-3" data-threshold="1"><span class="label">0.5-1 BTC</span><div class="bonus">+25% Tokens</div></div>
+             </div>
+        </section>
+        <section class="lottery-slip content-section card">
+            <div class="number-picker"><h3>Pick 3 Numbers (1-100) <span id="main-counter">(0/3)</span></h3><div class="number-grid" id="main-numbers-grid"></div></div>
+            <button class="quick-pick-btn" id="quick-pick">⚡ Quick Pick</button>
+            <div class="purchase-footer">
+                <div class="ticket-summary">
+                    <h4>Your $20.00 Ticket</h4>
+                    <div class="you-receive">
+                        <ul>
+                            <li><span class="icon">🎟️</span> 1 Lottery Ticket Entry</li>
+                            <li><span class="icon">🪙</span> 20 FOMO Coins</li>
+                            <li id="bonus-line"><span class="icon">✨</span> <span id="bonus-text">20 Bonus Coins (+100% Bonus!)</span></li>
+                        </ul>
+                    </div>
+                    <button class="cta-buy-ticket" id="buy-ticket-btn" disabled>Pick 3 Numbers</button>
+                </div>
+            </div>
+        </section>
+        <section class="token-info-section content-section card">
+            <div class="token-info-header"><h3>FOMO (FMO) Performance</h3></div>
+            <div class="card-content">
+                <div class="chart-container"><svg id="token-chart" width="100%" height="150" viewBox="0 0 300 150" preserveAspectRatio="none"><defs><linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255, 215, 0, 0.4)" /><stop offset="100%" style="stop-color:rgba(255, 215, 0, 0)" /></linearGradient></defs><polyline id="chart-line" stroke="var(--accent-gold)" stroke-width="2" fill="none" /><path id="chart-fill" fill="url(#chartGradient)"/></svg></div>
+                <div class="token-details">
+                    <ul class="token-details-list">
+                        <li><span>Price</span> <span id="token-price">$0.001500</span></li>
+                        <li><span>24h Change</span> <span id="token-change" class="token-price-change positive">+0.00%</span></li>
+                        <li><span>Market Cap</span> <span id="market-cap">$0</span></li>
+                        <li><span>Volume (24h)</span> <span id="volume-24h">$0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.150.1/build/three.module.js';
+        
+        // --- FUNCTION DECLARATIONS (DEFINED BEFORE USE) ---
+        function setupAnimation() { const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true }); renderer.setSize(window.innerWidth, window.innerHeight); camera.position.z = 5; const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); scene.add(ambientLight); const pointLight1 = new THREE.PointLight(0xffd700, 0.8, 100); pointLight1.position.set(5, 5, 5); scene.add(pointLight1); const pointLight2 = new THREE.PointLight(0x775ada, 0.8, 100); pointLight2.position.set(-5, -5, -5); scene.add(pointLight2); const objects = []; const lotteryBallGeometry = new THREE.SphereGeometry(0.15, 32, 16); const coinGeometry = new THREE.CylinderGeometry(0.12, 0.12, 0.04, 32); const lotteryMaterial = new THREE.MeshStandardMaterial({ color: 0x775ada, roughness: 0.4, metalness: 0.6 }); const coinMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.3, metalness: 0.8, emissive: 0x665500 }); for (let i = 0; i < 150; i++) { const isLotteryBall = Math.random() > 0.5; let mesh = isLotteryBall ? new THREE.Mesh(lotteryBallGeometry, lotteryMaterial) : new THREE.Mesh(coinGeometry, coinMaterial); if (!isLotteryBall) mesh.rotation.x = Math.random() * Math.PI; mesh.position.set((Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15); mesh.rotation.y = Math.random() * 2 * Math.PI; const scale = Math.random() * 0.5 + 0.5; mesh.scale.set(scale, scale, scale); mesh.velocity = new THREE.Vector3((Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005); objects.push(mesh); scene.add(mesh); } const bounds = { x: 8, y: 5 }; function animate() { requestAnimationFrame(animate); objects.forEach(obj => { obj.rotation.x += 0.001; obj.rotation.y += 0.002; obj.position.add(obj.velocity); if (obj.position.x > bounds.x || obj.position.x < -bounds.x) obj.velocity.x *= -1; if (obj.position.y > bounds.y || obj.position.y < -bounds.y) obj.velocity.y *= -1; if (obj.position.z > camera.position.z) obj.position.z = -10; else if (obj.position.z < -10) obj.position.z = camera.position.z; }); renderer.render(scene, camera); } animate(); window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }); }
+        function logisticGrowth(tick) { const day = (tick / MAX_TICKS) * SIMULATION_DURATION_DAYS; return MAX_HYPERGROWTH_TICKETS / (1 + Math.exp(-STEEPNESS * (day - MIDPOINT))); }
+        function drawChart(data) { const step = 300 / (data.length - 1); const points = data.map((p, i) => `${i * step},${p}`).join(' '); chartLine.setAttribute('points', points); chartFill.setAttribute('d', `M ${points} L 300 150 L 0 150 Z`); }
+        function generateGrid(container, count) { container.innerHTML = ''; for (let i = 1; i <= count; i++) { const btn = document.createElement('button'); btn.classList.add('number-btn'); btn.textContent = i; btn.dataset.number = i; btn.addEventListener('click', () => handleNumberClick(btn, i)); container.appendChild(btn); } }
+        function updateCtaButton() { mainCounter.textContent = `(${selectedNumbers.size}/${MAX_PICKS})`; if (selectedNumbers.size === MAX_PICKS) { buyTicketBtn.disabled = false; buyTicketBtn.textContent = `Buy for $20 & Join Pool`; } else { buyTicketBtn.disabled = true; buyTicketBtn.textContent = `Pick 3 Numbers`; } }
+        function handleNumberClick(btn, number) { if (selectedNumbers.has(number)) { selectedNumbers.delete(number); btn.classList.remove('selected'); } else { if (selectedNumbers.size < MAX_PICKS) { selectedNumbers.add(number); btn.classList.add('selected'); } } const disableRest = selectedNumbers.size >= MAX_PICKS; mainNumbersGrid.querySelectorAll('.number-btn').forEach(b => { b.disabled = !selectedNumbers.has(parseInt(b.dataset.number)) && disableRest; }); updateCtaButton(); }
+        function handleQuickPick() { selectedNumbers.clear(); while(selectedNumbers.size < MAX_PICKS) { selectedNumbers.add(Math.floor(Math.random() * NUM_BALLS) + 1); } mainNumbersGrid.querySelectorAll('.number-btn').forEach(b => { b.classList.remove('selected'); if(selectedNumbers.has(parseInt(b.dataset.number))) b.classList.add('selected'); }); updateCtaButton(); }
+
+        // --- CONSTANTS & STATE ---
+        const MOCK_BTC_PRICE_USD = 113440;
+        const JACKPOT_CONTRIBUTION_PER_TICKET = 19;
+        const BURN_VALUE_PER_TICKET = 1;
+        const PRICE_IMPACT_PER_BURN = 0.00000001;
+        const IGNITION_GOAL_BTC = 1.0;
+        const BASE_TOKEN_REWARD = 20;
+        const MAX_PICKS = 3, NUM_BALLS = 100;
+        const PRE_SALE_SUPPLY = 5000000;
+        const SIMULATION_DURATION_DAYS = 14;
+        const MAX_TICKS = 200;
+        const MAX_HYPERGROWTH_TICKETS = (IGNITION_GOAL_BTC * MOCK_BTC_PRICE_USD / JACKPOT_CONTRIBUTION_PER_TICKET) * 2.5;
+        const STEEPNESS = 0.8; 
+        const MIDPOINT = SIMULATION_DURATION_DAYS / 2; // Corrected Midpoint
+        const SEVEN_DAY_CHART_DATA = [130, 110, 120, 90, 100, 60, 75, 40, 50, 25, 45, 20, 30];
+        
+        let tick = 1; 
+        let selectedNumbers = new Set();
+        let currentPrice = 0.0015;
+        let price24hAgo = 0.001485;
+        let previousTicketsSold = 0;
+
+        // --- DOM ELEMENTS ---
+        const jackpotValueEl = document.getElementById('jackpot-value'), progressBarEl = document.getElementById('progress-bar'), bonusTextEl = document.getElementById('bonus-text'), bonusLineEl = document.getElementById('bonus-line'), mainNumbersGrid = document.getElementById('main-numbers-grid'), mainCounter = document.getElementById('main-counter'), quickPickBtn = document.getElementById('quick-pick'), buyTicketBtn = document.getElementById('buy-ticket-btn'), priceEl = document.getElementById('token-price'), changeEl = document.getElementById('token-change'), marketCapEl = document.getElementById('market-cap'), volumeEl = document.getElementById('volume-24h'), chartLine = document.getElementById('chart-line'), chartFill = document.getElementById('chart-fill');
+        const tiers = [ { id: 'tier-1', threshold: 0.1, bonus: 1.00 }, { id: 'tier-2', threshold: 0.5, bonus: 0.50 }, { id: 'tier-3', threshold: 1.0, bonus: 0.25 }];
+
+        // --- MASTER UPDATE LOOP ---
+        function masterUpdateLoop() {
+            let simulatedTicketsSold;
+            const day = (tick / MAX_TICKS) * SIMULATION_DURATION_DAYS;
+
+            if (day <= SIMULATION_DURATION_DAYS) {
+                simulatedTicketsSold = logisticGrowth(tick);
+            } else {
+                simulatedTicketsSold = logisticGrowth(MAX_TICKS) + ((tick - MAX_TICKS) * (Math.random() * 2));
+            }
+            tick++;
+            
+            const newTicketsThisTick = simulatedTicketsSold - previousTicketsSold;
+            previousTicketsSold = simulatedTicketsSold;
+
+            const usdToJackpot = simulatedTicketsSold * JACKPOT_CONTRIBUTION_PER_TICKET;
+            const totalBtcRaised = usdToJackpot / MOCK_BTC_PRICE_USD;
+            jackpotValueEl.textContent = `${totalBtcRaised.toFixed(4)} BTC`;
+            const progress = (totalBtcRaised / IGNITION_GOAL_BTC) * 100;
+            progressBarEl.style.width = `${Math.min(progress, 100)}%`;
+            progressBarEl.textContent = `${progress.toFixed(1)}%`;
+
+            const currentTier = tiers.find(t => totalBtcRaised < t.threshold) || { id: null, bonus: 0 };
+            document.querySelectorAll('.tier').forEach(el => { el.classList.remove('active', 'completed'); const threshold = parseFloat(el.dataset.threshold); if (totalBtcRaised >= threshold) el.classList.add('completed'); else if (el.id === currentTier.id) el.classList.add('active'); });
+            if (currentTier.bonus > 0) { const bonusAmount = BASE_TOKEN_REWARD * currentTier.bonus; bonusTextEl.textContent = `${bonusAmount} Bonus Coins (+${currentTier.bonus * 100}% Bonus!)`; bonusLineEl.style.display = 'flex'; } else { bonusLineEl.style.display = 'none'; }
+            
+            const supplyFromTickets = simulatedTicketsSold * (BASE_TOKEN_REWARD * (1 + currentTier.bonus));
+            const circulatingSupply = PRE_SALE_SUPPLY + supplyFromTickets;
+            
+            // Apply price pressure from burns + random fluctuation
+            currentPrice += newTicketsThisTick * PRICE_IMPACT_PER_BURN;
+            currentPrice *= (1 + (Math.random() - 0.498) * 0.005);
+            
+            const marketCap = currentPrice * circulatingSupply;
+            const volume24h = marketCap * (0.1 + Math.random() * 0.05);
+            const changePercent = ((currentPrice - price24hAgo) / price24hAgo) * 100;
+            priceEl.textContent = `$${currentPrice.toFixed(6)}`;
+            marketCapEl.textContent = `$${Math.round(marketCap).toLocaleString()}`;
+            volumeEl.textContent = `$${Math.round(volume24h).toLocaleString()}`;
+            changeEl.textContent = `${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%`;
+            changeEl.className = `token-price-change ${changePercent >= 0 ? 'positive' : 'negative'}`;
+        }
+
+        // --- INITIALIZATION & EVENT LISTENERS ---
+        setupAnimation();
+        generateGrid(mainNumbersGrid, NUM_BALLS);
+        updateCtaButton();
+        quickPickBtn.addEventListener('click', handleQuickPick);
+        buyTicketBtn.addEventListener('click', () => { if (!buyTicketBtn.disabled) { alert(`Web3 Wallet integration would open now.`); }});
+        
+        drawChart(SEVEN_DAY_CHART_DATA);
+        masterUpdateLoop();
+        setInterval(masterUpdateLoop, 5000);
+    </script>
+</body>
+</html>

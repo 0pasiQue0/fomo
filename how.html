@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Lottery - How It Works</title>
+    <style>
+        /* CSS (unchanged from previous version) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        :root { --primary-blue: #0a043c; --secondary-purple: #775ada; --accent-gold: #ffd700; --text-light: #f4f4f4; --background-dark: #03001C; --card-background: rgba(13, 7, 66, 0.75); --success-green: #2ecc71; --win-blue: #3498db; --burn-red: #e74c3c;}
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background-color: var(--background-dark); color: var(--text-light); overflow-x: hidden; }
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .container { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 2rem 1rem; box-sizing: border-box; }
+        .content-section { width: 100%; max-width: 800px; margin-bottom: 2rem; }
+        .page-header { text-align: center; }
+        .page-header h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.2; color: var(--accent-gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin: 0 0 0.5rem 0; }
+        .page-header p { font-size: 1.1rem; font-weight: 300; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+        .card { background-color: var(--card-background); border: 1px solid var(--secondary-purple); border-radius: 20px; padding: 2rem; backdrop-filter: blur(10px); }
+        .flowchart { display: flex; flex-direction: column; align-items: center; }
+        .flow-step { width: 100%; text-align: center; position: relative; }
+        .flow-step .card { border-width: 2px; }
+        .flow-arrow { font-size: 2.5rem; color: var(--secondary-purple); margin: 1rem 0; font-weight: 800; }
+        .phase-title { font-size: 1rem; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 0.5rem; }
+        .flow-step h2 { margin: 0 0 0.5rem 0; }
+        .flow-step p { margin: 0; opacity: 0.8; font-size: 0.9rem; }
+        .branch-container { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; width: 100%; }
+        .scenario-card { padding: 1.5rem; border-radius: 15px; border: 2px solid; text-align: left; }
+        .scenario-card.winner { border-color: var(--win-blue); }
+        .scenario-card.rollover { border-color: var(--success-green); }
+        .scenario-card h3 { margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; }
+        .scenario-card.winner h3 { color: var(--win-blue); }
+        .scenario-card.rollover h3 { color: var(--success-green); }
+        .split-details { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed rgba(255,255,255,0.2); }
+        .split-item { display: flex; gap: 1rem; align-items: flex-start; }
+        .split-item .percent { font-size: 1.8rem; font-weight: 700; }
+        .split-item .desc h4 { margin: 0 0 0.25rem 0; font-weight: 600; }
+        .split-item .desc p { font-size: 0.9rem; }
+        .cta-button { display: inline-block; background-color: var(--accent-gold); color: var(--primary-blue); padding: 18px 40px; border: none; border-radius: 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.3s ease; }
+        .cta-button:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
+        @media(min-width: 768px) { .branch-container { flex-direction: row; } }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="container">
+        <header class="page-header content-section">
+            <h1>The Lottery That Builds Value</h1>
+            <p>Our unique jackpot system is designed to be a self-fueling ecosystem that rewards participation and drives long-term value for our token holders.</p>
+        </header>
+
+        <div class="flowchart content-section">
+
+            <!-- STEP 1: IGNITION -->
+            <div class="flow-step">
+                <div class="card" style="border-color: var(--accent-gold);">
+                    <div class="phase-title">Phase 1</div>
+                    <h2>🚀 The Ignition</h2>
+                    <p>It all starts here. We collect funds from ticket sales in a public pool until the jackpot hits the <strong>1 BTC Ignition Goal</strong>. This ensures the very first jackpot is a life-changing amount worth playing for.</p>
+                </div>
+            </div>
+
+            <div class="flow-arrow">⬇️</div>
+
+            <!-- NEW STEP 2: TICKET FUEL -->
+            <div class="flow-step">
+                <div class="card" style="border-color: var(--secondary-purple);">
+                    <div class="phase-title">The Engine</div>
+                    <h2>⛽ The Ticket Fuel</h2>
+                    <p>Every $20 ticket purchase is the engine of the entire ecosystem. The funds are automatically split to fuel both the jackpot and the token's value.</p>
+                     <div class="split-details">
+                        <div class="split-item">
+                            <div class="percent">$19</div>
+                            <div class="desc">
+                                <h4 style="color: var(--win-blue);">💰 To the Jackpot</h4>
+                                <p>Goes directly into the current week's jackpot pool, making the grand prize bigger with every single ticket sold.</p>
+                            </div>
+                        </div>
+                        <div class="split-item">
+                            <div class="percent">$1</div>
+                            <div class="desc">
+                                <h4 style="color: var(--burn-red);">🔥 "Burned" for Value</h4>
+                                <p>This dollar is used to add permanent value to the FOMO token, benefiting all holders by creating scarcity.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-arrow">⬇️</div>
+
+            <!-- STEP 3: WEEKLY CYCLE -->
+            <div class="flow-step">
+                <div class="card">
+                    <div class="phase-title">Phase 2</div>
+                    <h2>🔄 The 7-Day Jackpot Cycle</h2>
+                    <p>Once ignited, the lottery enters a continuous 7-day cycle funded by the $19 contribution from each new ticket. Every Friday, a winner is drawn. Two things can happen:</p>
+                    <div class="branch-container">
+                        <div class="scenario-card winner"><h3>👑 Scenario A: A Winner is Crowned!</h3><p>If your numbers match, you win the entire jackpot pool! The pool resets for the next week's cycle.</p></div>
+                        <div class="scenario-card rollover"><h3>📈 Scenario B: The Rollover Protocol</h3><p>If no one wins the jackpot, our unique protocol kicks in, creating a win-win for everyone.</p></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+
+            <!-- STEP 4: THE SPLIT EXPLAINED -->
+            <div class="flow-step">
+                 <div class="card" style="border-color: var(--success-green);">
+                    <div class="phase-title">The Rollover Explained</div>
+                    <h2>The 50/50 Value Split</h2>
+                    <p>When a jackpot is not won, the entire pool (all the $19 contributions) is split into two equal halves:</p>
+                    <div class="split-details">
+                        <div class="split-item"><div class="percent">50%</div><div class="desc"><h4>💰 Fuels the Next Jackpot</h4><p>This half is rolled over, instantly making the next week's starting jackpot significantly larger and more attractive.</p></div></div>
+                        <div class="split-item"><div class="percent">50%</div><div class="desc"><h4>💎 Increases Coin Value</h4><p>This half is used to automatically buy our token from the market and "burn" it. This reduces the total supply, creating more scarcity and increasing value for all token holders.</p></div></div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+        
+        <div class="content-section" style="text-align: center; margin-top: 2rem;">
+            <a href="index.html" class="cta-button">Get Your Ticket & Join The Cycle!</a>
+        </div>
+    </div>
+    
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.150.1/build/three.module.js';
+        // --- 3D Background Animation (Fully functional, same as previous page) ---
+        const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true }); renderer.setSize(window.innerWidth, window.innerHeight); camera.position.z = 5; const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); scene.add(ambientLight); const pointLight1 = new THREE.PointLight(0xffd700, 0.8, 100); pointLight1.position.set(5, 5, 5); scene.add(pointLight1); const pointLight2 = new THREE.PointLight(0x775ada, 0.8, 100); pointLight2.position.set(-5, -5, -5); scene.add(pointLight2); const objects = []; const lotteryBallGeometry = new THREE.SphereGeometry(0.15, 32, 16); const coinGeometry = new THREE.CylinderGeometry(0.12, 0.12, 0.04, 32); const lotteryMaterial = new THREE.MeshStandardMaterial({ color: 0x775ada, roughness: 0.4, metalness: 0.6 }); const coinMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.3, metalness: 0.8, emissive: 0x665500 }); for (let i = 0; i < 150; i++) { const isLotteryBall = Math.random() > 0.5; let mesh = isLotteryBall ? new THREE.Mesh(lotteryBallGeometry, lotteryMaterial) : new THREE.Mesh(coinGeometry, coinMaterial); if (!isLotteryBall) mesh.rotation.x = Math.random() * Math.PI; mesh.position.set((Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15); mesh.rotation.y = Math.random() * 2 * Math.PI; const scale = Math.random() * 0.5 + 0.5; mesh.scale.set(scale, scale, scale); mesh.velocity = new THREE.Vector3((Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005); objects.push(mesh); scene.add(mesh); } const bounds = { x: 8, y: 5 }; function animate() { requestAnimationFrame(animate); objects.forEach(obj => { obj.rotation.x += 0.001; obj.rotation.y += 0.002; obj.position.add(obj.velocity); if (obj.position.x > bounds.x || obj.position.x < -bounds.x) obj.velocity.x *= -1; if (obj.position.y > bounds.y || obj.position.y < -bounds.y) obj.velocity.y *= -1; if (obj.position.z > camera.position.z) obj.position.z = -10; else if (obj.position.z < -10) obj.position.z = camera.position.z; }); renderer.render(scene, camera); } animate(); window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+    </script>
+</body>
+</html>
