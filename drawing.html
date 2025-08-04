@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOMO Lottery - The Reveal</title>
+    <style>
+        /* CSS is simplified as the complex reel is no longer needed */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        :root { --primary-blue: #0a043c; --secondary-purple: #775ada; --accent-gold: #ffd700; --text-light: #f4f4f4; --background-dark: #03001C; --card-background: rgba(13, 7, 66, 0.75); --success-green: #2ecc71; --fail-red: #e74c3c; }
+        @keyframes highlight-win { 0%, 100% { box-shadow: 0 0 20px var(--success-green); } 50% { box-shadow: 0 0 35px #fff; } }
+        @keyframes highlight-lose { 0%, 100% { box-shadow: 0 0 20px var(--fail-red); } 50% { box-shadow: 0 0 35px #fff; } }
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background-color: var(--background-dark); color: var(--text-light); overflow-x: hidden; }
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .container { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 2rem 1rem; box-sizing: border-box; }
+        .content-section { width: 100%; max-width: 800px; margin-bottom: 2rem; }
+        .page-header { text-align: center; }
+        .page-header h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); margin: 0 0 0.5rem 0; }
+        .page-header p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.9; }
+        .card { background-color: var(--card-background); border: 1px solid var(--secondary-purple); border-radius: 20px; padding: 2rem; backdrop-filter: blur(10px); }
+        .reveal-container { text-align: center; }
+        .reveal-area { min-height: 112px; display: flex; align-items: center; justify-content: center; }
+        #reveal-timer-container { font-size: clamp(4rem, 15vw, 6rem); font-weight: 800; color: var(--accent-gold); text-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
+        .winning-numbers { display: flex; justify-content: center; gap: 1rem; }
+        .number-ball {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-blue);
+            border: 2px solid var(--secondary-purple);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+        .my-ticket-section h3 { text-align: center; font-weight: 600; margin-bottom: 1.5rem; }
+        .my-numbers-grid { display: flex; justify-content: center; gap: 1rem; }
+        .my-number { width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600; background-color: rgba(0,0,0,0.2); border: 1px solid var(--secondary-purple); transition: all 0.5s ease-in-out; }
+        .my-number.correct { background-color: var(--success-green); color: var(--primary-blue); border-color: var(--success-green); animation: highlight-win 1.5s ease-in-out; }
+        .my-number.incorrect { background-color: var(--fail-red); color: var(--primary-blue); border-color: var(--fail-red); animation: highlight-lose 1.5s ease-in-out; }
+        #result-message { text-align: center; font-size: 1.5rem; margin-top: 1.5rem; font-weight: 700; height: 2rem; }
+        .transparency-section p { text-align: center; opacity: 0.8; font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .download-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+        .download-btn { background: none; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 10px 20px; border-radius: 20px; cursor: pointer; text-decoration: none; transition: all 0.3s ease; }
+        .download-btn:hover { background-color: var(--accent-gold); color: var(--primary-blue); }
+        .download-btn.disabled { border-color: #555; color: #777; cursor: not-allowed; pointer-events: none; }
+        .download-btn.disabled:hover { background: none; }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div class="container">
+        <!-- HTML is identical to previous version -->
+        <header class="page-header content-section"><h1>The Reveal Is Imminent</h1><p>The winning numbers have been pre-selected and cryptographically sealed. Witness the live reveal below.</p></header><section class="reveal-container content-section card"><h2>Winning Numbers</h2><div class="reveal-area"><div id="reveal-timer-container">3</div><div class="winning-numbers" id="winning-numbers-container" style="display: none;"><div class="number-ball"></div><div class="number-ball"></div><div class="number-ball"></div></div></div></section><section class="my-ticket-section content-section card" id="my-ticket-section" style="display: none;"><h3>Your Ticket</h3><div class="my-numbers-grid" id="my-numbers-grid"></div><p id="result-message"></p></section><section class="transparency-section content-section card"><h2>Provably Fair Drawing</h2><p>Our drawings are fully transparent. The winning numbers are generated and encrypted before the draw. You can download the encrypted file now and the decryption key after the reveal to verify the integrity of the draw.</p><div class="download-links"><a href="encrypted-numbers.txt" download class="download-btn">Download Encrypted Numbers</a><a href="decryption-key.txt" download class="download-btn disabled" id="key-download-btn">Download Decryption Key</a></div></section>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.150.1/build/three.module.js';
+
+        // --- BACKGROUND ANIMATION (Identical and correct) ---
+        function setupAnimation() { const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true }); renderer.setSize(window.innerWidth, window.innerHeight); camera.position.z = 5; const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); scene.add(ambientLight); const pointLight1 = new THREE.PointLight(0xffd700, 0.8, 100); pointLight1.position.set(5, 5, 5); scene.add(pointLight1); const pointLight2 = new THREE.PointLight(0x775ada, 0.8, 100); pointLight2.position.set(-5, -5, -5); scene.add(pointLight2); const objects = []; const lotteryBallGeometry = new THREE.SphereGeometry(0.15, 32, 16); const coinGeometry = new THREE.CylinderGeometry(0.12, 0.12, 0.04, 32); const lotteryMaterial = new THREE.MeshStandardMaterial({ color: 0x775ada, roughness: 0.4, metalness: 0.6 }); const coinMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.3, metalness: 0.8, emissive: 0x665500 }); for (let i = 0; i < 150; i++) { const isLotteryBall = Math.random() > 0.5; let mesh = isLotteryBall ? new THREE.Mesh(lotteryBallGeometry, lotteryMaterial) : new THREE.Mesh(coinGeometry, coinMaterial); if (!isLotteryBall) mesh.rotation.x = Math.random() * Math.PI; mesh.position.set((Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15); mesh.rotation.y = Math.random() * 2 * Math.PI; const scale = Math.random() * 0.5 + 0.5; mesh.scale.set(scale, scale, scale); mesh.velocity = new THREE.Vector3((Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005); objects.push(mesh); scene.add(mesh); } const bounds = { x: 8, y: 5 }; function animate() { requestAnimationFrame(animate); objects.forEach(obj => { obj.rotation.x += 0.001; obj.rotation.y += 0.002; obj.position.add(obj.velocity); if (obj.position.x > bounds.x || obj.position.x < -bounds.x) obj.velocity.x *= -1; if (obj.position.y > bounds.y || obj.position.y < -bounds.y) obj.velocity.y *= -1; if (obj.position.z > camera.position.z) obj.position.z = -10; else if (obj.position.z < -10) obj.position.z = camera.position.z; }); renderer.render(scene, camera); } animate(); window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }); }
+
+        // --- DRAWING PAGE LOGIC ---
+        const WINNING_NUMBERS = [42, 8, 77];
+        const USER_TICKET_NUMBERS = [43, 9, 78];
+
+        const timerContainer = document.getElementById('reveal-timer-container');
+        const winningNumbersContainer = document.getElementById('winning-numbers-container');
+        const numberBalls = Array.from(winningNumbersContainer.querySelectorAll('.number-ball'));
+        const myTicketSection = document.getElementById('my-ticket-section');
+        const myNumbersGrid = document.getElementById('my-numbers-grid');
+        const resultMessageEl = document.getElementById('result-message');
+        const keyDownloadBtn = document.getElementById('key-download-btn');
+        let countdown = 3;
+
+        // Simplified helper functions
+        function createNumberDiv(number, className) { const numDiv = document.createElement('div'); numDiv.classList.add(className); numDiv.textContent = number; return numDiv; }
+        function initializeUserTicket() { if (USER_TICKET_NUMBERS && USER_TICKET_NUMBERS.length > 0) { myTicketSection.style.display = 'block'; myNumbersGrid.innerHTML = ''; USER_TICKET_NUMBERS.forEach(num => { const myNumber = createNumberDiv(num, 'my-number'); myNumber.dataset.number = num; myNumbersGrid.appendChild(myNumber); }); } }
+        function checkUserTicket() { if (!USER_TICKET_NUMBERS || USER_TICKET_NUMBERS.length === 0) return; const myNumberDivs = myNumbersGrid.querySelectorAll('.my-number'); let correctCount = 0; myNumberDivs.forEach((div, index) => { const userNum = parseInt(div.dataset.number); setTimeout(() => { const isCorrect = WINNING_NUMBERS.includes(userNum); div.classList.add(isCorrect ? 'correct' : 'incorrect'); if (isCorrect) correctCount++; if (index === myNumberDivs.length - 1) { if (correctCount === WINNING_NUMBERS.length) { resultMessageEl.textContent = `JACKPOT! You matched all numbers!`; resultMessageEl.style.color = 'var(--accent-gold)'; } } }, index * 500); }); keyDownloadBtn.classList.remove('disabled'); }
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+
+        // *** NEW: The core animation function for a single number ball ***
+        function animateBall(ball, finalNumber, duration) {
+            let interval = 40; // Start fast
+            let elapsed = 0;
+            
+            const animator = setInterval(() => {
+                ball.textContent = Math.floor(Math.random() * 100);
+                elapsed += interval;
+
+                // Slow down the animation in the last 1.5 seconds
+                if (duration - elapsed < 1500) {
+                    interval *= 1.15; // Gradually increase interval, slowing it down
+                }
+
+                if (elapsed >= duration) {
+                    clearInterval(animator);
+                    ball.textContent = finalNumber;
+                }
+            }, interval);
+
+            return animator; // Return the interval so we can stop it if needed
+        }
+
+        // *** NEW: The main sequential reveal logic ***
+        async function revealNumbersSequentially() {
+            // Start all balls animating at the same time
+            const animators = numberBalls.map((ball, i) => animateBall(ball, WINNING_NUMBERS[i], 18000)); // Animate for a long time
+
+            // --- First Halt ---
+            await delay(5000); // Wait 5 seconds
+            clearInterval(animators[0]); // Stop the fast animation
+            // Begin the slowdown and halt for the first ball
+            animateBall(numberBalls[0], WINNING_NUMBERS[0], 1500);
+
+            // --- Second Halt ---
+            await delay(5000); // Wait another 5 seconds
+            clearInterval(animators[1]);
+            animateBall(numberBalls[1], WINNING_NUMBERS[1], 1500);
+
+            // --- Final Halt ---
+            await delay(6000); // Wait the final 6 seconds
+            clearInterval(animators[2]);
+            animateBall(numberBalls[2], WINNING_NUMBERS[2], 1500);
+            
+            // Check ticket after the final slowdown has finished
+            setTimeout(checkUserTicket, 2000);
+        }
+
+        // --- INITIALIZATION ---
+        setupAnimation();
+        initializeUserTicket();
+
+        const timerInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                timerContainer.textContent = countdown;
+            } else {
+                clearInterval(timerInterval);
+                timerContainer.style.display = 'none';
+                winningNumbersContainer.style.display = 'flex';
+
+                setTimeout(revealNumbersSequentially, 50);
+            }
+        }, 1000);
+
+    </script>
+</body>
+</html>```

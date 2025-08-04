@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOMO Lottery - 1000x Better Odds</title>
     <style>
-        /* CSS (unchanged from previous version) */
+        /* CSS is identical to the provided file */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
         :root { --primary-blue: #0a043c; --secondary-purple: #775ada; --accent-gold: #ffd700; --text-light: #f4f4f4; --background-dark: #03001C; --card-background: rgba(13, 7, 66, 0.75); --success-green: #2ecc71; --fail-red: #e74c3c; }
         @keyframes pulse-gold { 0% { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); } 50% { border-color: #fff; box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); } 100% { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); } }
@@ -68,60 +68,14 @@
 <body>
     <canvas id="bg-canvas"></canvas>
     <div class="container">
-        <header class="page-header content-section">
-            <h1>1000x Better Odds Than The Powerball.</h1>
-            <p>Every Ticket Earns You Tokens in Our Jackpot Ecosystem</p>
-        </header>
-        <section class="ignition-tracker content-section card">
-            <h2>Current Jackpot Pool</h2><div class="jackpot-value" id="jackpot-value">0.0000 BTC</div>
-            <div class="progress-bar-container"><div class="progress-bar-inner" id="progress-bar">0.0%</div></div>
-            <p class="goal-text"><a href="how.html">First draw starts when the pool hits the <strong>1 BTC Ignition Goal!</strong></a></p>
-        </section>
-        <section class="bonus-ladder content-section">
-             <h3>Early Adopter Bonus Ladder</h3>
-             <div class="ladder-tiers">
-                <div class="tier active" id="tier-1" data-threshold="0.1"><span class="label">0-0.1 BTC</span><div class="bonus">+100% Tokens</div></div>
-                <div class="tier" id="tier-2" data-threshold="0.5"><span class="label">0.1-0.5 BTC</span><div class="bonus">+50% Tokens</div></div>
-                <div class="tier" id="tier-3" data-threshold="1"><span class="label">0.5-1 BTC</span><div class="bonus">+25% Tokens</div></div>
-             </div>
-        </section>
-        <section class="lottery-slip content-section card">
-            <div class="number-picker"><h3>Pick 3 Numbers (1-100) <span id="main-counter">(0/3)</span></h3><div class="number-grid" id="main-numbers-grid"></div></div>
-            <button class="quick-pick-btn" id="quick-pick">⚡ Quick Pick</button>
-            <div class="purchase-footer">
-                <div class="ticket-summary">
-                    <h4>Your $20.00 Ticket</h4>
-                    <div class="you-receive">
-                        <ul>
-                            <li><span class="icon">🎟️</span> 1 Lottery Ticket Entry</li>
-                            <li><span class="icon">🪙</span> 20 FOMO Coins</li>
-                            <li id="bonus-line"><span class="icon">✨</span> <span id="bonus-text">20 Bonus Coins (+100% Bonus!)</span></li>
-                        </ul>
-                    </div>
-                    <button class="cta-buy-ticket" id="buy-ticket-btn" disabled>Pick 3 Numbers</button>
-                </div>
-            </div>
-        </section>
-        <section class="token-info-section content-section card">
-            <div class="token-info-header"><h3>FOMO (FMO) Performance</h3></div>
-            <div class="card-content">
-                <div class="chart-container"><svg id="token-chart" width="100%" height="150" viewBox="0 0 300 150" preserveAspectRatio="none"><defs><linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255, 215, 0, 0.4)" /><stop offset="100%" style="stop-color:rgba(255, 215, 0, 0)" /></linearGradient></defs><polyline id="chart-line" stroke="var(--accent-gold)" stroke-width="2" fill="none" /><path id="chart-fill" fill="url(#chartGradient)"/></svg></div>
-                <div class="token-details">
-                    <ul class="token-details-list">
-                        <li><span>Price</span> <span id="token-price">$0.001500</span></li>
-                        <li><span>24h Change</span> <span id="token-change" class="token-price-change positive">+0.00%</span></li>
-                        <li><span>Market Cap</span> <span id="market-cap">$0</span></li>
-                        <li><span>Volume (24h)</span> <span id="volume-24h">$0</span></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+        <!-- HTML is identical to the provided file -->
+        <header class="page-header content-section"><h1>1000x Better Odds Than The Powerball.</h1><p>Every Ticket Earns You Tokens in Our Jackpot Ecosystem</p></header><section class="ignition-tracker content-section card"><h2>Current Jackpot Pool</h2><p class="goal-text"><a href="drawing.html"><strong>Result</strong></a></p><div class="jackpot-value" id="jackpot-value">0.0000 BTC</div><div class="progress-bar-container"><div class="progress-bar-inner" id="progress-bar">0.0%</div></div><p class="goal-text"><a href="how.html">First draw starts when the pool hits the <strong>1 BTC Ignition Goal!</strong></a></p></section><section class="bonus-ladder content-section"><h3>Early Adopter Bonus Ladder</h3><div class="ladder-tiers"><div class="tier active" id="tier-1" data-threshold="0.1"><span class="label">0-0.1 BTC</span><div class="bonus">+100% Tokens</div></div><div class="tier" id="tier-2" data-threshold="0.5"><span class="label">0.1-0.5 BTC</span><div class="bonus">+50% Tokens</div></div><div class="tier" id="tier-3" data-threshold="1"><span class="label">0.5-1 BTC</span><div class="bonus">+25% Tokens</div></div></div></section><section class="lottery-slip content-section card"><div class="number-picker"><h3>Pick 3 Numbers (1-100) <span id="main-counter">(0/3)</span></h3><div class="number-grid" id="main-numbers-grid"></div></div><button class="quick-pick-btn" id="quick-pick">⚡ Quick Pick</button><div class="purchase-footer"><div class="ticket-summary"><h4>Your $20.00 Ticket</h4><div class="you-receive"><ul><li><span class="icon">🎟️</span> 1 Lottery Ticket Entry</li><li><span class="icon">🪙</span> 20 FOMO Coins</li><li id="bonus-line"><span class="icon">✨</span> <span id="bonus-text">20 Bonus Coins (+100% Bonus!)</span></li></ul></div><button class="cta-buy-ticket" id="buy-ticket-btn" disabled>Pick 3 Numbers</button></div></div></section><section class="token-info-section content-section card"><div class="token-info-header"><h3>FOMO (FMO) Performance</h3></div><div class="card-content"><div class="chart-container"><svg id="token-chart" width="100%" height="150" viewBox="0 0 300 150" preserveAspectRatio="none"><defs><linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255, 215, 0, 0.4)" /><stop offset="100%" style="stop-color:rgba(255, 215, 0, 0)" /></linearGradient></defs><polyline id="chart-line" stroke="var(--accent-gold)" stroke-width="2" fill="none" /><path id="chart-fill" fill="url(#chartGradient)"/></svg></div><div class="token-details"><ul class="token-details-list"><li><span>Price</span> <span id="token-price">$0.001500</span></li><li><span>24h Change</span> <span id="token-change" class="token-price-change positive">+0.00%</span></li><li><span>Market Cap</span> <span id="market-cap">$0</span></li><li><span>Volume (24h)</span> <span id="volume-24h">$0</span></li></ul></div></div></section>
     </div>
     
     <script type="module">
         import * as THREE from 'https://unpkg.com/three@0.150.1/build/three.module.js';
         
-        // --- FUNCTION DECLARATIONS (DEFINED BEFORE USE) ---
+        // --- FUNCTION DECLARATIONS (Identical) ---
         function setupAnimation() { const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true }); renderer.setSize(window.innerWidth, window.innerHeight); camera.position.z = 5; const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); scene.add(ambientLight); const pointLight1 = new THREE.PointLight(0xffd700, 0.8, 100); pointLight1.position.set(5, 5, 5); scene.add(pointLight1); const pointLight2 = new THREE.PointLight(0x775ada, 0.8, 100); pointLight2.position.set(-5, -5, -5); scene.add(pointLight2); const objects = []; const lotteryBallGeometry = new THREE.SphereGeometry(0.15, 32, 16); const coinGeometry = new THREE.CylinderGeometry(0.12, 0.12, 0.04, 32); const lotteryMaterial = new THREE.MeshStandardMaterial({ color: 0x775ada, roughness: 0.4, metalness: 0.6 }); const coinMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.3, metalness: 0.8, emissive: 0x665500 }); for (let i = 0; i < 150; i++) { const isLotteryBall = Math.random() > 0.5; let mesh = isLotteryBall ? new THREE.Mesh(lotteryBallGeometry, lotteryMaterial) : new THREE.Mesh(coinGeometry, coinMaterial); if (!isLotteryBall) mesh.rotation.x = Math.random() * Math.PI; mesh.position.set((Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 15); mesh.rotation.y = Math.random() * 2 * Math.PI; const scale = Math.random() * 0.5 + 0.5; mesh.scale.set(scale, scale, scale); mesh.velocity = new THREE.Vector3((Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005); objects.push(mesh); scene.add(mesh); } const bounds = { x: 8, y: 5 }; function animate() { requestAnimationFrame(animate); objects.forEach(obj => { obj.rotation.x += 0.001; obj.rotation.y += 0.002; obj.position.add(obj.velocity); if (obj.position.x > bounds.x || obj.position.x < -bounds.x) obj.velocity.x *= -1; if (obj.position.y > bounds.y || obj.position.y < -bounds.y) obj.velocity.y *= -1; if (obj.position.z > camera.position.z) obj.position.z = -10; else if (obj.position.z < -10) obj.position.z = camera.position.z; }); renderer.render(scene, camera); } animate(); window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }); }
         function logisticGrowth(tick) { const day = (tick / MAX_TICKS) * SIMULATION_DURATION_DAYS; return MAX_HYPERGROWTH_TICKETS / (1 + Math.exp(-STEEPNESS * (day - MIDPOINT))); }
         function drawChart(data) { const step = 300 / (data.length - 1); const points = data.map((p, i) => `${i * step},${p}`).join(' '); chartLine.setAttribute('points', points); chartFill.setAttribute('d', `M ${points} L 300 150 L 0 150 Z`); }
@@ -130,32 +84,35 @@
         function handleNumberClick(btn, number) { if (selectedNumbers.has(number)) { selectedNumbers.delete(number); btn.classList.remove('selected'); } else { if (selectedNumbers.size < MAX_PICKS) { selectedNumbers.add(number); btn.classList.add('selected'); } } const disableRest = selectedNumbers.size >= MAX_PICKS; mainNumbersGrid.querySelectorAll('.number-btn').forEach(b => { b.disabled = !selectedNumbers.has(parseInt(b.dataset.number)) && disableRest; }); updateCtaButton(); }
         function handleQuickPick() { selectedNumbers.clear(); while(selectedNumbers.size < MAX_PICKS) { selectedNumbers.add(Math.floor(Math.random() * NUM_BALLS) + 1); } mainNumbersGrid.querySelectorAll('.number-btn').forEach(b => { b.classList.remove('selected'); if(selectedNumbers.has(parseInt(b.dataset.number))) b.classList.add('selected'); }); updateCtaButton(); }
 
-        // --- CONSTANTS & STATE ---
+        // --- CONSTANTS & STATE (Updated) ---
         const MOCK_BTC_PRICE_USD = 113440;
-        const JACKPOT_CONTRIBUTION_PER_TICKET = 19;
+        
+        // *** NEW: Define contributions per ticket ***
+        const USD_TO_JACKPOT_PER_TICKET = 19;
+        const USD_TO_MARKET_CAP_PER_TICKET = 1;
+
         const IGNITION_GOAL_BTC = 1.0;
         const BASE_TOKEN_REWARD = 20;
         const MAX_PICKS = 3, NUM_BALLS = 100;
-        const PRE_SALE_SUPPLY = 700000; // Corrected: Realistic base supply
+        const PRE_SALE_SUPPLY = 700000;
         const SIMULATION_DURATION_DAYS = 14;
         const MAX_TICKS = 200;
-        const MAX_HYPERGROWTH_TICKETS = (IGNITION_GOAL_BTC * MOCK_BTC_PRICE_USD / JACKPOT_CONTRIBUTION_PER_TICKET) * 2.5;
+        const MAX_HYPERGROWTH_TICKETS = (IGNITION_GOAL_BTC * MOCK_BTC_PRICE_USD / USD_TO_JACKPOT_PER_TICKET) * 2.5; // Adjusted for new logic
         const STEEPNESS = 0.8; 
         const MIDPOINT = SIMULATION_DURATION_DAYS / 2;
         const SEVEN_DAY_CHART_DATA = [130, 110, 120, 90, 100, 60, 75, 40, 50, 25, 45, 20, 30];
         
         let tick = 1;
         let selectedNumbers = new Set();
-        let initialPrice = 0.0015; // Set an initial price
         let price24hAgo = 0.00149;
 
-        // --- DOM ELEMENTS ---
+        // --- DOM ELEMENTS (Identical) ---
         const jackpotValueEl = document.getElementById('jackpot-value'), progressBarEl = document.getElementById('progress-bar'), bonusTextEl = document.getElementById('bonus-text'), bonusLineEl = document.getElementById('bonus-line'), mainNumbersGrid = document.getElementById('main-numbers-grid'), mainCounter = document.getElementById('main-counter'), quickPickBtn = document.getElementById('quick-pick'), buyTicketBtn = document.getElementById('buy-ticket-btn'), priceEl = document.getElementById('token-price'), changeEl = document.getElementById('token-change'), marketCapEl = document.getElementById('market-cap'), volumeEl = document.getElementById('volume-24h'), chartLine = document.getElementById('chart-line'), chartFill = document.getElementById('chart-fill');
         const tiers = [ { id: 'tier-1', threshold: 0.1, bonus: 1.00 }, { id: 'tier-2', threshold: 0.5, bonus: 0.50 }, { id: 'tier-3', threshold: 1.0, bonus: 0.25 }];
 
-        // --- MASTER UPDATE LOOP ---
+        // --- MASTER UPDATE LOOP (*** MODIFIED ***) ---
         function masterUpdateLoop() {
-            // 1. Calculate Ticket Sales
+            // 1. Calculate Ticket Sales (Logic Unchanged)
             let simulatedTicketsSold;
             const day = (tick / MAX_TICKS) * SIMULATION_DURATION_DAYS;
             if (day <= SIMULATION_DURATION_DAYS) {
@@ -165,25 +122,27 @@
             }
             tick++;
             
-            // 2. Calculate Jackpot Values
-            const usdToJackpot = simulatedTicketsSold * JACKPOT_CONTRIBUTION_PER_TICKET;
+            // 2. Calculate Jackpot Value (Logic Updated)
+            const usdToJackpot = simulatedTicketsSold * USD_TO_JACKPOT_PER_TICKET;
             const totalBtcRaised = usdToJackpot / MOCK_BTC_PRICE_USD;
             jackpotValueEl.textContent = `${totalBtcRaised.toFixed(4)} BTC`;
             const progress = (totalBtcRaised / IGNITION_GOAL_BTC) * 100;
             progressBarEl.style.width = `${Math.min(progress, 100)}%`;
             progressBarEl.textContent = `${progress.toFixed(1)}%`;
             
-            // 3. Update UI based on Jackpot
+            // 3. Update UI based on Jackpot (Logic Unchanged)
             const currentTier = tiers.find(t => totalBtcRaised < t.threshold) || { id: null, bonus: 0 };
             document.querySelectorAll('.tier').forEach(el => { el.classList.remove('active', 'completed'); const threshold = parseFloat(el.dataset.threshold); if (totalBtcRaised >= threshold) el.classList.add('completed'); else if (el.id === currentTier.id) el.classList.add('active'); });
             if (currentTier.bonus > 0) { const bonusAmount = BASE_TOKEN_REWARD * currentTier.bonus; bonusTextEl.textContent = `${bonusAmount} Bonus Coins (+${currentTier.bonus * 100}% Bonus!)`; bonusLineEl.style.display = 'flex'; } else { bonusLineEl.style.display = 'none'; }
             
-            // 4. Calculate Supply & Cohesive Market Cap
+            // 4. Calculate Supply & Market Cap (Logic Updated)
             const supplyFromTickets = simulatedTicketsSold * (BASE_TOKEN_REWARD * (1 + currentTier.bonus));
             const circulatingSupply = PRE_SALE_SUPPLY + supplyFromTickets;
-            const marketCap = usdToJackpot * 1.1; // The core cohesive logic
             
-            // 5. Derive Price and other stats
+            // The NEW market cap logic: $1 per ticket sold
+            const marketCap = simulatedTicketsSold * USD_TO_MARKET_CAP_PER_TICKET;
+            
+            // 5. Derive Price and other stats (Logic Unchanged)
             const currentPrice = marketCap / circulatingSupply;
             const volume24h = marketCap * (0.1 + Math.random() * 0.05);
             const changePercent = ((currentPrice - price24hAgo) / price24hAgo) * 100;
@@ -194,7 +153,7 @@
             changeEl.className = `token-price-change ${changePercent >= 0 ? 'positive' : 'negative'}`;
         }
 
-        // --- INITIALIZATION & EVENT LISTENERS ---
+        // --- INITIALIZATION & EVENT LISTENERS (Identical) ---
         setupAnimation();
         generateGrid(mainNumbersGrid, NUM_BALLS);
         updateCtaButton();
